@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Untitled Document</title>
+<script language="javascript" src="formValidatorClass.js"></script>
+<script language="javascript">
+function validateForm(form)
+{
+	var frm = new FormValidator(form);
+	
+	frm.validateText("txtName", "You must enter your name");
+	frm.validateNumber("txtAge", "You must enter your age");
+	frm.validateRange("txtCost", "You must enter a number between 20 and 30", 20.00, 30.00);
+	frm.validateLength("txtCCNumber", "You must enter 16 digits", 16, 16);
+	frm.validateDate("txtDate", "Date must be in the following format: dd/mm/yyyy");
+	frm.validateText("txtAddress", "You must enter your address");
+	frm.validateEither("txtEmail", "txtPhone", "You must enter either your e-mail address or your phone number.");
+	frm.validateEmail("txtEmail", "You must enter your email");
+	frm.validatePhone("txtPhone", "You must enter your phone");
+	frm.validateSelect("selOptions", "You must select an option");
+	frm.setDependency("selOptions", "txtOptionThree", "3");
+	frm.validateText("txtOptionThree", "Why did you select 3?");
+	frm.validateRadio("rdoColors", "You must enter select at least one color");
+	frm.setDependency("rdoColors", "txtWhy", "Green");
+	frm.validateText("txtWhy", "Tell us why you like green");
+	frm.validateCheck("chkDisplay", "Check it!");
+	frm.setDependency("chkDisplay", "txtComments");
+	frm.validateText("txtComments", "Check your comments");
+	frm.setDependency("rdoFood", "txtWhyPizza", "Yes");
+	frm.validateText("txtWhyPizza", "Tell us why you like pizza");
+	frm.validateBoth("txtPassword1", "txtPassword2", "Passwords must match");
+	frm.validateText("txtPassword1", "You must enter a password");
+	frm.validateText("txtPassword2", "You must enter a password 2");
+	frm.validateIncludeString("txtInclude", "You must have the world hello in the field", "hello");
+	frm.validateExcludeString("txtExclude", "You must not have <a href in your text box", "<a href");
+	frm.validateFormat("txtTime", "Time is not properly formatted", "11:11:11 xx");
+
+	
+	if(frm.validate() == true)
+	{
+		return true;
+	}
+	else
+	{
+		alert(frm.getErrorMessage());
+		document.getElementById(frm.getFieldToFocusOn()).focus();
+		return false;
+	}
+}
+</script>
+<link href="styles.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<h1>Form Validation using Code </h1>
+<p>Things to remember when using this validator.</p>
+<ol>
+	<li>Your file must include a reference to the formValidatorClass.js file. <a href="formValidatorClass.js">Download it here.</a> <br /><code><font color="#FF0000"><br />&lt;script language=&quot;javascript&quot; src=&quot;formValidatorClass.js&quot;&gt;&lt;/script&gt;</font> </code></li>
+	<li>You must create your own validateForm function, create an instance of the formValidator class and call the necessary validate methods. You will also need to write the check to see if the form validates correctly. </li>
+	<li>Your form tag must call the validateForm function (or whatever you decided to name it) and pass it the form.<br /><code><br />&lt;form ... <font color="#FF0000">onsubmit=&quot;return validateForm(this);&quot;</font>&gt;</code></li>
+	<li>Any field you want to validate, you must do so with the proper method.<br /><code><font color="#FF0000"><br /><br />...<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;myValidateClass.validateText(&quot;<font color="#0000FF">typeOfDataToValidate<font color="#FF0000">&quot;, &quot;</font>errorMessage</font>&quot;);<br />... </font></code></li>
+</ol>
+<p>For Example, if we want to validate a text field named txtName, we would do the following in the javascript function: </p>
+<p><code>myValidateClass.validateText(&quot;txtName&quot;, &quot;Please enter your name.&quot;);</code></p>
+<p>ALL fields must have a name attribute and an id attribute.  </p>
+<p>typesOfDataToValidate = [validateText, validateNumber, validateRange, validateLength, validateDate, validatePhone, validateEmail, validateCurrency, validateSelect, validateRadio, validateCheck, validateBoth, validateEither, setDependency, validateFormat]. </p>
+<p>validateText(&quot;fieldID&quot;, &quot;Error Message&quot;);</p>
+<p>validateRange(&quot;fieldID&quot;, &quot;Error Message&quot;, startingNumber, endingNumber);</p>
+<p>validateDate(&quot;fieldID&quot;, &quot;Error Message&quot;);</p>
+<p>validatePhone(&quot;fieldID&quot;, &quot;Error Message&quot;);</p>
+<p>validateEmail(&quot;fieldID&quot;, &quot;Error Message&quot;);</p>
+validateCurrency(&quot;fieldID&quot;, &quot;ErrorMessage&quot;);
+<p>validateSelect(&quot;fieldID&quot;, &quot;ErrorMessage&quot;);</p>
+<p>validateRadio(&quot;fieldID&quot;, &quot;ErrorMessage&quot;);</p>
+<p>validateCheck(&quot;fieldID&quot;, &quot;ErrorMessage&quot;);</p>
+<p>validateBoth(&quot;fieldID&quot;, &quot;fieldID&quot;, &quot;ErrorMessage&quot;); Note: This only verifys that two fields content matches. </p>
+<p>validateEither(&quot;fieldID&quot;, &quot;fieldID&quot;, &quot;ErrorMessage&quot;); Note: You must validate both fields after calling validateEither.</p>
+<p>setDependency(&quot;fieldID&quot;, &quot;fieldID&quot;, criteria); Note: criteria is optional. </p>
+<p>validateStringInclude(&quot;fieldID&quot;, &quot;errorMessage&quot;, &quot;string to include&quot;); </p>
+<p>validateStringExclude(&quot;fieldID&quot;, &quot;errorMessage&quot;, &quot;string to exclude&quot;); <br /><br />validateFormat(&quot;fieldID&quot;, &quot;errorMessage&quot;, &quot;string to test against&quot;); Note: x represents any letter, 1 represents any number, * represents either. Special characters are exact matches. </p>
+<hr />
+<form id="form1" name="form1" method="post" action="formValidateCODE-process.asp" onsubmit="return validateForm(this);">
+	<p> Name
+		<input name="txtName" type="text" id="txtName" />
+	(check empty)</p>
+	<p>Age
+		<label for="txtTime"></label>
+			<input type="text" name="txtAge" id="txtAge" />
+	(check number) </p>
+	<p>Cost 
+		<input type="text" name="txtCost" id="txtCost" />
+	(check range) </p>
+	<p>CC Number 
+		<input type="text" name="txtCCNumber" id="txtCCNumber" />
+	(check length) </p>
+	<p>Date
+		<input type="text" name="txtDate" id="txtDate" />
+	(check date 1/1/0001 - 12/31/9999)</p>	
+	<p> Address
+		<input name="txtAddress" type="text" id="txtAddress" />
+	(check empty) </p>
+	<p> Either E-Mail Or Phone (check Either)</p>
+	<p> E-Mail
+		<input name="txtEmail" type="text" id="txtEmail" />
+	(check email) </p>
+	<p>Phone
+		<input name="txtPhone" type="text" id="txtPhone" />
+	(check phone) </p>
+	<p>
+		<select name="selOptions" id="selOptions">
+			<option value="null">Select An Option</option>
+			<option value="1">1</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+			<option value="5">5</option>
+		</select>
+	(check select) 
+	<input type="text" name="txtOptionThree" id="txtOptionThree" />
+	</p>
+	<p>red
+		<input name="rdoColors" id="rdoColors" type="radio" value="Red" />
+		blue
+		<input name="rdoColors" id="rdoColors" type="radio" value="Blue" />
+		green
+		<input name="rdoColors" id="rdoColors" type="radio" value="Green" />
+		<label for="txtTime"></label>
+		(check radio)
+		<input type="text" name="txtWhy" id="txtWhy" />
+	</p>
+	<p> Display
+		<input name="chkDisplay" type="checkbox" id="chkDisplay" value="yes" />
+		(check check)
+		<label for="txtTime"></label>
+			<textarea name="txtComments" id="txtComments"></textarea>
+			(check empty)	</p>
+	<p>Do you like pizza?  
+		<input name="rdoFood" type="radio" value="Yes" />
+	Yes 
+	<input name="rdoFood" type="radio" value="Maybe" />
+	Maybe
+	<input name="rdoFood" type="radio" value="No" />
+	If yes, please explain. 
+	<label for="txtTime"></label>
+	<input type="text" name="txtWhyPizza" id="txtWhyPizza" />
+	</p>
+	<p>Password: 
+		<label for="txtTime"></label>
+		<input type="text" name="txtPassword1" id="txtPassword1" />
+		verify 
+		<input type="text" name="txtPassword2" id="txtPassword2" />
+	</p>
+	<p>Must include hello: 
+		<label for="txtTime"></label>
+		<input type="text" name="txtInclude" id="txtInclude" />
+	</p>
+	<p>Must not include &lt;a href: 
+		<label for="txtTime"></label>
+		<input type="text" name="txtExclude" id="txtExclude" />
+		<br /><br />Validate Format 
+		<input type="text" name="txtTime" id="txtTime" />
+	(12:00:00 AM|PM)</p>
+	<p>
+		<input type="submit" name="Submit" value="Submit" />
+	</p>
+</form>
+</body>
+</html>
